@@ -1,0 +1,18 @@
+[Unit]
+Description=WolfNet - Secure Private Mesh Networking
+Before=wolfstack.service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/wolfnet --config /etc/wolfnet/config.toml
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+DeviceAllow=/dev/net/tun rw
+RuntimeDirectory=wolfnet
+RuntimeDirectoryMode=0755
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,62 @@
+# ==============================================================================
+# Homelab Repository .gitignore
+# ==============================================================================
+
+# Environment variable files containing sensitive credentials
+.env
+*.env
+!.env.example
+*.env.local
+*.env.*.local
+
+# Sensitive credentials, certificates, private keys
+*.key
+*.pem
+*.crt
+*.csr
+*.pfx
+*.p12
+*.ovpn
+*.conf
+!glance.yml
+!home.yml
+!news.yml
+!markets.yml
+!cal.yml
+
+# Storage, database files, and persistent volume data
+data/
+db/
+postgres/
+pgdata/
+mongo/
+redis/
+uploads/
+downloads/
+library/
+thumbs/
+backups/
+_DATA/
+*.sqlite
+*.sqlite3
+*.db
+*.log
+*.tar.gz
+*.zip
+
+# Wazuh certificates & indexed data
+wazuh-certificates/
+wazuh-indexer-data/
+
+# Twingate credentials
+twingate.token
+connector.state
+
+# OS / Editor temporary files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+*.bak

@@ -1,0 +1,38 @@
+services:
+  odysseus:
+    image: odysseus:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: odysseus
+    restart: unless-stopped
+    ports:
+      - "7001:7000"
+    environment:
+      - LLM_HOST=${LLM_HOST:-http://ollama:11434}
+      - CHROMADB_HOST=chromadb
+      - CHROMADB_PORT=8000
+      - SEARXNG_INSTANCE=${SEARXNG_INSTANCE:-http://searxng:8080}
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - chromadb
+      - searxng
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: odysseus-chromadb
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8100:8000"
+    volumes:
+      - ./chroma_data:/chroma/chroma
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: odysseus-searxng
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./searxng:/etc/searxng

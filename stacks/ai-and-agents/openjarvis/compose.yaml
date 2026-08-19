@@ -1,0 +1,12 @@
+services:
+  openjarvis:
+    image: ghcr.io/openjarvis/openjarvis:latest
+    container_name: openjarvis
+    restart: unless-stopped
+    ports:
+      - "7200:7200"
+    environment:
+      - OLLAMA_HOST=http://10.0.0.50:11434
+      - OPENJARVIS_API_KEY=${OPENJARVIS_API_KEY}
+    volumes:
+      - ./data:/data

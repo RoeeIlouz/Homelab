@@ -1,0 +1,18 @@
+[Unit]
+Description=OpenJarvis AI Server
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/Home/pi/OpenJarvis
+Environment=PATH=/Home/pi/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HOME=/Home/pi
+Environment=OLLAMA_HOST=http://localhost:11434
+Environment=OPENJARVIS_API_KEY=YOUR_OPENJARVIS_KEY
+ExecStart=/Home/pi/OpenJarvis/.venv/bin/jarvis serve --host 0.0.0.0 --port 7200 -m qwen2.5:0.5b
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

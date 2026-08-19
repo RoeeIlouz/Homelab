@@ -1,0 +1,24 @@
+- name: News
+  columns:
+    - size: small
+      widgets:
+        - type: rss
+          title: Tech News
+          feeds:
+            - url: https://feeds.bloomberg.com/markets/news.rss
+              title: Bloomberg
+            - url: https://moxie.foxbusiness.com/google-publisher/technology.xml
+              title: Fox Business
+    - size: full
+      widgets:
+        - type: rss
+          title: Global Feeds
+          feeds:
+            - url: https://feeds.bloomberg.com/markets/news.rss
+              title: Bloomberg
+            - url: https://moxie.foxbusiness.com/google-publisher/markets.xml
+              title: Fox Business
+        - type: group
+          widgets:
+            - type: hacker-news
+            - type: lobsters

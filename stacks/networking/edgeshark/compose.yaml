@@ -1,0 +1,19 @@
+services:
+  gostwire:
+    image: ghcr.io/siemens/ghostwire:latest
+    container_name: gostwire
+    restart: unless-stopped
+    pid: host
+    network_mode: host
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  edgeshark:
+    image: ghcr.io/siemens/packetflix:latest
+    container_name: edgeshark
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

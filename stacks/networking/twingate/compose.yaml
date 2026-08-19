@@ -1,0 +1,30 @@
+services:
+  twingate-connector-primary:
+    image: twingate/connector:latest
+    container_name: careful-kangaroo
+    restart: always
+    environment:
+      - TWINGATE_NETWORK=${TWINGATE_NETWORK}
+      - TWINGATE_ACCESS_TOKEN=${TWINGATE_ACCESS_TOKEN_1}
+      - TWINGATE_REFRESH_TOKEN=${TWINGATE_REFRESH_TOKEN_1}
+    labels:
+      - glance.hide=false
+      - glance.id=twingate
+      - glance.name=Twingate Connector (Primary)
+      - glance.icon=sh:twingate-light
+      - glance.description=Zero Trust Network Access
+
+  twingate-connector-secondary:
+    image: twingate/connector:latest
+    container_name: large-asp
+    restart: always
+    environment:
+      - TWINGATE_NETWORK=${TWINGATE_NETWORK}
+      - TWINGATE_ACCESS_TOKEN=${TWINGATE_ACCESS_TOKEN_2}
+      - TWINGATE_REFRESH_TOKEN=${TWINGATE_REFRESH_TOKEN_2}
+    labels:
+      - glance.hide=false
+      - glance.parent=twingate
+      - glance.name=Twingate Connector (Secondary)
+      - glance.icon=sh:twingate-light
+      - glance.description=Zero Trust Network Access Failover

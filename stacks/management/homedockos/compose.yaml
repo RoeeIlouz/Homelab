@@ -1,0 +1,16 @@
+services:
+  homedock:
+    image: bansheetech/homedock-os:latest
+    container_name: homedock-os
+    restart: unless-stopped
+    ports:
+      - "13370:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./_DATA:/app/_DATA
+    labels:
+      - glance.hide=false
+      - glance.name=HomeDock OS
+      - glance.icon=sh:homedock-light
+      - glance.url=http://10.0.0.50:13370
+      - glance.description=HomeDock OS Manager

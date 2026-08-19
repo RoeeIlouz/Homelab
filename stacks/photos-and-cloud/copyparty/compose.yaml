@@ -1,0 +1,10 @@
+services:
+  copyparty:
+    image: copyparty/ac:latest
+    container_name: copyparty
+    restart: unless-stopped
+    ports:
+      - "3923:3923"
+    volumes:
+      - ./config:/cfg
+      - /data:/data

@@ -1,0 +1,32 @@
+# ==============================================================================
+# GLANCE DASHBOARD STACK
+# ==============================================================================
+# Unified homepage and dashboard with custom feed widgets, market tracking,
+# calendar integration, and Docker container state discovery.
+# ==============================================================================
+
+services:
+  glance:
+    image: glanceapp/glance:latest
+    container_name: glance
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config
+      - ./assets:/app/assets
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8081:8080"
+    env_file:
+      - .env
+    labels:
+      - glance.hide=false
+      - glance.name=Glance
+      - glance.icon=sh:glance-light
+      - glance.url=http://10.0.0.50:8081
+      - glance.description=Central homelab startpage
+
+  glances-ical-api:
+    image: ghcr.io/awildleon/glance-ical-events:latest
+    container_name: glance-ical-api
+    restart: always

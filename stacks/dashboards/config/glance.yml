@@ -1,0 +1,12 @@
+server:
+  assets-path: /app/assets
+
+theme:
+  background-color: 50 1 6
+  primary-color: 24 97 58
+  negative-color: 209 88 54
+
+pages:
+  - $include: home.yml
+  - $include: markets.yml
+  - $include: news.yml

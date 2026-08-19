@@ -1,0 +1,21 @@
+services:
+  lab-dash:
+    image: ghcr.io/anthonygress/lab-dash:latest
+    container_name: lab-dash
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "2022:2022"
+    environment:
+      - SECRET=${LAB_DASH_SECRET:-YOUR_SECRET_KEY}
+    volumes:
+      - /sys:/sys:ro
+      - ./config:/config
+      - ./uploads:/app/public/uploads
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - glance.hide=false
+      - glance.name=Lab-Dash
+      - glance.icon=sh:dashboard-light
+      - glance.url=http://10.0.0.50:2022
+      - glance.description=Homelab Dashboard

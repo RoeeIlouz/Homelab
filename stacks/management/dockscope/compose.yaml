@@ -1,0 +1,15 @@
+services:
+  dockscope:
+    image: ghcr.io/manuelr-t/dockscope:latest
+    container_name: dockscope
+    restart: unless-stopped
+    ports:
+      - "4681:4681"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - glance.hide=false
+      - glance.name=Dockscope
+      - glance.icon=sh:dockpeek-light
+      - glance.url=http://10.0.0.50:4681
+      - glance.description=Docker visual inspection tool

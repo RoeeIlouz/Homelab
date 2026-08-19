@@ -1,0 +1,30 @@
+services:
+  hbbs:
+    image: rustdesk/rustdesk-server:latest
+    container_name: hbbs
+    command: hbbs
+    network_mode: "host"
+    volumes:
+      - ./data:/root
+    depends_on:
+      - hbbr
+    labels:
+      - glance.hide=false
+      - glance.name=RustDesk ID Server (hbbs)
+      - glance.icon=sh:rustdesk-light
+      - glance.description=Self-hosted RustDesk Rendezvous Server
+    restart: unless-stopped
+
+  hbbr:
+    image: rustdesk/rustdesk-server:latest
+    container_name: hbbr
+    command: hbbr
+    network_mode: "host"
+    volumes:
+      - ./data:/root
+    labels:
+      - glance.hide=false
+      - glance.name=RustDesk Relay Server (hbbr)
+      - glance.icon=sh:rustdesk-light
+      - glance.description=Self-hosted RustDesk Relay Server
+    restart: unless-stopped

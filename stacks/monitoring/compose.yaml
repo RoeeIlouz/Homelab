@@ -1,0 +1,75 @@
+# ==============================================================================
+# MONITORING & OBSERVABILITY STACK
+# ==============================================================================
+# Lightweight monitoring stack featuring Beszel (resource metrics),
+# Uptime Kuma (service uptime), and Dockpeek (container management).
+# ==============================================================================
+
+services:
+  # Beszel Central Hub
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./beszel_data:/beszel_data
+    labels:
+      - glance.hide=false
+      - glance.name=Beszel Hub
+      - glance.icon=sh:beszel-light
+      - glance.url=http://10.0.0.50:8090
+      - glance.description=Host resource monitoring hub
+
+  # Beszel Host Agent
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./beszel_agent_data:/var/lib/beszel-agent
+    environment:
+      LISTEN: 45876
+      KEY: "${BESZEL_PUBLIC_KEY}"
+      TOKEN: "${BESZEL_TOKEN}"
+      HUB_URL: "${BESZEL_HUB_URL:-http://10.0.0.50:8090}"
+
+  # Uptime Kuma Status Monitor
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    volumes:
+      - ./uptimekuma_data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "3001:3001"
+    labels:
+      - glance.hide=false
+      - glance.name=Uptime Kuma
+      - glance.icon=sh:uptime-kuma-light
+      - glance.url=http://10.0.0.50:3001
+      - glance.description=Service uptime & ping monitoring
+    restart: always
+
+  # Dockpeek Container UI
+  dockpeek:
+    image: dockpeek/dockpeek:latest
+    container_name: dockpeek
+    environment:
+      - SECRET_KEY=${DOCKPEEK_SECRET_KEY:-change_this_secret_key_32_chars}
+      - USERNAME=${DOCKPEEK_USERNAME:-admin}
+      - PASSWORD=${DOCKPEEK_PASSWORD:-change_this_password}
+    ports:
+      - "3420:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - glance.hide=false
+      - glance.name=Dockpeek
+      - glance.icon=sh:dockpeek-light
+      - glance.url=http://10.0.0.50:3420
+      - glance.description=Docker container manager
+    restart: unless-stopped

@@ -1,0 +1,61 @@
+# ==============================================================================
+# KOMODO ORCHESTRATION STACK
+# ==============================================================================
+services:
+  komodo-core:
+    image: ghcr.io/mbecker20/komodo:latest
+    container_name: komodo-core-1
+    restart: unless-stopped
+    ports:
+      - "9120:9120"
+    volumes:
+      - komodo_repo-cache:/repo-cache
+    environment:
+      - KOMODO_TITLE=Komodo
+      - KOMODO_PASSKEY=${KOMODO_PASSKEY:-a_secure_passkey}
+      - KOMODO_JWT_SECRET=${KOMODO_JWT_SECRET:-a_secure_jwt_secret}
+      - KOMODO_JWT_TTL=1-day
+      - KOMODO_DATABASE_ADDRESS=mongo:27017
+      - KOMODO_DATABASE_USERNAME=admin
+      - KOMODO_DATABASE_PASSWORD=${KOMODO_DB_PASSWORD:-adminpassword}
+      - KOMODO_FIRST_SERVER=https://periphery:8120
+      - PERIPHERY_PASSKEYS=${KOMODO_PASSKEY:-a_secure_passkey}
+      - PERIPHERY_SSL_ENABLED=true
+      - KOMODO_LOCAL_AUTH=true
+    depends_on:
+      - komodo-mongo
+
+  komodo-periphery:
+    image: ghcr.io/mbecker20/periphery:latest
+    container_name: komodo-periphery-1
+    restart: unless-stopped
+    ports:
+      - "8120:8120"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/proc
+      - komodo_stacks:/etc/komodo/stacks
+      - komodo_repos:/etc/komodo/repos
+      - komodo_ssl-certs:/etc/komodo/ssl
+    environment:
+      - PERIPHERY_PASSKEYS=${KOMODO_PASSKEY:-a_secure_passkey}
+      - PERIPHERY_SSL_ENABLED=true
+
+  komodo-mongo:
+    image: mongo:latest
+    container_name: komodo-mongo-1
+    restart: unless-stopped
+    volumes:
+      - komodo_mongo-data:/data/db
+      - komodo_mongo-config:/data/configdb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=${KOMODO_DB_PASSWORD:-adminpassword}
+
+volumes:
+  komodo_repo-cache:
+  komodo_stacks:
+  komodo_repos:
+  komodo_ssl-certs:
+  komodo_mongo-data:
+  komodo_mongo-config:

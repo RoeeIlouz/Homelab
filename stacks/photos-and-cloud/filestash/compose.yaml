@@ -1,0 +1,25 @@
+services:
+  app:
+    image: machines/filestash:latest
+    container_name: filestash
+    restart: always
+    environment:
+      - ONLYOFFICE_URL=http://collabora:9980
+    ports:
+      - "8334:8334"
+    volumes:
+      - ./data/state:/app/data/state
+    depends_on:
+      - wopi_server
+
+  wopi_server:
+    image: collabora/code:latest
+    container_name: collabora
+    restart: always
+    environment:
+      - aliasgroup1=http://.*:8334
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true
+    ports:
+      - "9980:9980"
+    cap_add:
+      - MKNOD
